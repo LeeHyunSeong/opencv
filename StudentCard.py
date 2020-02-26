@@ -13,11 +13,9 @@ import random
 import os
 
 class StudentCard:  # 학생증 클래스
-    IMG_PATH = 'tmp/studentCard' + str(random.randint(0,100)) + '.png'
-
     def __init__(self, imgStr):
         self.studentInfo = {}
-
+        self.IMG_PATH = 'tmp/studentCard' + str(random.randint(0,100000)) + '.png'
         metadataLen = imgStr.find(',')
         if not self.__checkImageType(imgStr[:metadataLen]):
             raise ImageTypeUnmatchError
@@ -25,11 +23,13 @@ class StudentCard:  # 학생증 클래스
         with open(self.IMG_PATH, 'wb') as f:
             f.write(self.imgData)
         self.img = cv2.imread(self.IMG_PATH)
-        self.h, self.w = self.img.shape[:2]
+        os.remove(self.IMG_PATH)
+        self.rect = {}
 
     def loadDataOfImg(self):  # 사진에서 데이터 저장 함수
-        infoROI = self.img[int(self.h*0.6):int(self.h*0.85),
-                           int(self.w*0.28):int(self.w*0.73)]
+        print(rect['x1'])
+        infoROI = self.img[self.rect['y1']:self.rect['y2'],
+                           self.rect['x1']:self.rect['x2']]
         strOfImage = image_to_string(infoROI, lang='kor')
         strOfImg = strOfImage.strip("'")
         datas = strOfImg.split('\n')
@@ -67,12 +67,20 @@ class StudentCard:  # 학생증 클래스
     def loadQRcode(self):  # Qr코드 해석 후 role 저장 함수
         grayImg = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
         QRcode = pyzbar.decode(grayImg)
+        for d in QRcode:
+            x = d.rect[0]
+            y = d.rect[1]
+            w = d.rect[2]
+            h = d.rect[3]
+        self.rect['x1'] = x - int(0.75*w)
+        self.rect['x2'] = x + int(0.55*w)
+        self.rect['y1'] = y + int(1.3*w)
+        self.rect['y2'] = y + int(2.25*w)
         values = list(map(lambda value: value.data.decode('utf-8'), QRcode))
         response = requests.get(values[0])
         QRdatas = response.text.split('"')
         results = list(
             filter(lambda data: True if data != '' else False, QRdatas))
-
         if results[7] == "FAIL":
             raise QRcodeReadError
         elif results[7] == "SUCCES":
@@ -80,6 +88,3 @@ class StudentCard:  # 학생증 클래스
 
     def getStudentInfo(self):
         return self.studentInfo
-
-    def removeFile(self):
-        os.remove(IMG_PATH)
