@@ -18,8 +18,8 @@ def studentcard():
         
         imgData = request.form['imgData']
         studentCard = StudentCard(imgData)
-        studentCard.loadDataOfImg()
         studentCard.loadQRcode()
+        studentCard.loadDataOfImg()
 
         response['message'] = 'Success'
         response['data'] = studentCard.getStudentInfo()
