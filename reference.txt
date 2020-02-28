@@ -1,0 +1,16 @@
+
+# CORS for communication between frontend and backend => pip install -U flask-cors
+# (CORS docs) https://flask-cors.readthedocs.io/en/1.9.0/
+
+# (API 라이브러리) https://rekt77.tistory.com/103
+# API request data handling (axios.js) https://stackoverflow.com/questions/45373124/axios-post-request-to-flask
+
+
+
+# (영상처리) https://shinminyong.tistory.com/5
+# (영상처리) https://076923.github.io/posts/Python-opencv-1/
+# (이미지) https://stackoverflow.com/questions/16214190/how-to-convert-base64-string-to-image/16214280
+# (Qr코드 처리) https://www.opentutorials.org/module/3811/25284
+# (Qr코드 처리 값 해석) https://bcho.tistory.com/822
+
+# (파이썬 의존성) pip install -r ./requirements.txt

@@ -16,6 +16,7 @@ class StudentCardReadError(ApiError):
     def __init__(self):
         super().__init__(400, 'Failed to recognize Student Card')
 
+
 class ImageTypeUnmatchError(ApiError):
     def __init__(self):
         super().__init__(400, 'Only base64 type image can recongnize')
